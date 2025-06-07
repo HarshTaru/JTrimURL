@@ -32,8 +32,6 @@ public class AuthController {
 
     @PostMapping("/public/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-        // This method is a placeholder for login functionality.
-        // In a real application, you would implement authentication logic here.
         return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 }
