@@ -1,5 +1,6 @@
 package com.url.urlshortenersb.controller;
 
+import com.url.urlshortenersb.dtos.LoginRequest;
 import com.url.urlshortenersb.dtos.RegisterRequest;
 import com.url.urlshortenersb.models.User;
 import com.url.urlshortenersb.service.UserService;
@@ -27,5 +28,12 @@ public class AuthController {
         user.setRole("ROLE_USER");
         userService.registerUser(user);
         return ResponseEntity.ok("User registered successfully");
+    }
+
+    @PostMapping("/public/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        // This method is a placeholder for login functionality.
+        // In a real application, you would implement authentication logic here.
+        return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 }
