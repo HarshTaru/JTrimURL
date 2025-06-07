@@ -2,6 +2,7 @@ package com.url.urlshortenersb.service;
 
 import com.url.urlshortenersb.dtos.ClickEventDTO;
 import com.url.urlshortenersb.dtos.UrlMappingDTO;
+import com.url.urlshortenersb.models.ClickEvent;
 import com.url.urlshortenersb.models.UrlMapping;
 import com.url.urlshortenersb.models.User;
 import com.url.urlshortenersb.repository.ClickEventRepository;
@@ -95,5 +96,22 @@ public class UrlMappingService {
 
         return clickEvents.stream()
                 .collect(Collectors.groupingBy(ClickEventDTO::getClickDate, Collectors.summingLong(ClickEventDTO::getCount)));
+    }
+
+    public UrlMapping getOriginalUrl(String shortUrl) {
+        UrlMapping urlMapping = urlMappingRepository.findByShortUrl(shortUrl);
+        if (urlMapping != null) {
+            urlMapping.setClickCount(urlMapping.getClickCount() + 1);
+            urlMappingRepository.save(urlMapping);
+
+            //Record the click event
+            ClickEvent clickEvent = new ClickEvent();
+            clickEvent.setClickDate(LocalDateTime.now());
+            clickEvent.setUrlMapping(urlMapping);
+            clickEventRepository.save(clickEvent);
+
+            return urlMapping;
+        }
+        return null;
     }
 }
