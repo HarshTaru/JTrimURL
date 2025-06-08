@@ -7,6 +7,7 @@ import com.url.urlshortenersb.models.UrlMapping;
 import com.url.urlshortenersb.models.User;
 import com.url.urlshortenersb.repository.ClickEventRepository;
 import com.url.urlshortenersb.repository.UrlMappingRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -113,5 +115,20 @@ public class UrlMappingService {
             return urlMapping;
         }
         return null;
+    }
+
+    @Transactional
+    public boolean deleteUrl(String shortUrl, User user) {
+        Optional<UrlMapping> url= urlMappingRepository.findByShortUrlAndUser(shortUrl,user);
+        if (url.isPresent() ) {
+            //delete click events associated with the url mapping
+            clickEventRepository.deleteByUrlMapping(url.get());
+            //delete url mapping
+            urlMappingRepository.deleteByShortUrlAndUser(shortUrl, user);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

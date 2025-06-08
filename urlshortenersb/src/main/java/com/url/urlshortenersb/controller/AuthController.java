@@ -22,6 +22,9 @@ public class AuthController {
     @PostMapping("/public/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         User user = new User();
+        if (registerRequest.getEmail().isBlank() || registerRequest.getUsername().isBlank() || registerRequest.getPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("Email, username, and password are required");
+        }
         user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
         user.setPassword(registerRequest.getPassword());
@@ -32,6 +35,9 @@ public class AuthController {
 
     @PostMapping("/public/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        if(loginRequest.getUsername().isBlank() || loginRequest.getPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("Username and password are required");
+        }
         return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 }

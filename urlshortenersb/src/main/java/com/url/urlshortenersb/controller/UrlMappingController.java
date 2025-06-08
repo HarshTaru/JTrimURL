@@ -67,4 +67,15 @@ public class UrlMappingController {
         Map<LocalDate ,Long> totalClicks = urlMappingService.getTotalClicksByUser(user, start, end);
         return ResponseEntity.ok(totalClicks);
     }
+
+    @DeleteMapping("/delete/{shortUrl}")
+    public ResponseEntity<String> deleteUrl(@PathVariable String shortUrl, Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        boolean isDeleted = urlMappingService.deleteUrl(shortUrl, user);
+        if (isDeleted) {
+            return ResponseEntity.ok("URL deleted successfully");
+        } else {
+            return ResponseEntity.status(404).body("URL not found or you do not have permission to delete it");
+        }
+    }
 }
