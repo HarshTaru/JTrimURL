@@ -82,7 +82,7 @@ function AuthPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white rounded-4xl shadow-2xl px-10 py-12 max-w-md w-full mx-5">
+            <div className="bg-white rounded-4xl shadow-neutral-500 shadow-2xl px-10 py-12 max-w-md w-full mx-5">
                 <header className="mb-8 text-center">
                     <h1 className="text-4xl font-extrabold mb-2">{isLogin ? 'Login' : 'Register'}</h1>
                     <p className="text-gray-500 text-sm">
