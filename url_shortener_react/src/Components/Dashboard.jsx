@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { FaExternalLinkAlt } from "react-icons/fa";
-
+import { formatDate } from '../utils/FormatDate';
 
 
 const Dashboard = () => {
@@ -80,7 +79,7 @@ const Dashboard = () => {
     function Metrics() {
         if ((!clicks || clicks.length === 0) & (!linksCount || linksCount.length === 0)) return "No metrics available at the moment.";
         return (
-            <section className="max-w-7xl mx-auto px-6 mb-20">
+            <section className="max-w-7xl mx-auto px-6 mb-20 mt-0">
                 <div className="flex justify-center gap-6" >
                     <MetricCard key="linkCount" label="Total Links" value={linksCount.toString()} />
                     <MetricCard key="clicksCount" label="Total Clicks" value={clicks.toString()} />
@@ -131,7 +130,10 @@ const Dashboard = () => {
             }
         };
 
-
+        const redirectToManageLinks = (e) => {
+            redirectIfNoAuth(e);
+            window.location.href = '/manage';
+        };
 
         return (
             <section id="links" className="max-w-7xl mx-auto mb-16 px-6">
@@ -145,7 +147,7 @@ const Dashboard = () => {
                             Create New Link
                         </button>
                         <button
-                            onClick={redirectIfNoAuth}
+                            onClick={redirectToManageLinks}
                             className="rounded-lg border border-gray-300 text-gray-700 px-5 py-2 font-semibold hover:bg-gray-100 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         >
                             Manage Links
@@ -160,17 +162,7 @@ const Dashboard = () => {
         if (!links || links.length === 0)
             return <p className="text-center text-gray-500">No links to display. Create one to get started.</p>;
 
-        // Helper to format ISO date string to human-readable format
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-            });
-        }
+        
 
         return (
             <section className="max-w-7xl mx-auto mb-24 px-6 overflow-x-auto">
@@ -180,29 +172,36 @@ const Dashboard = () => {
                             <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700">Short URL</th>
                             <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700">Original URL</th>
                             <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700">Clicks</th>
-                            <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700">Created</th>
-                            <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700">Actions</th>
+                            <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700">Created On</th>
+                            <th className="border-b border-gray-300 pb-3 font-semibold text-gray-700 text-center">Actions</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         {links.map(({ id, originalUrl, shortUrl, clickCount, createdDate }) => (
-                            <tr key={id} className="hover:bg-gray-50 transition-colors">
-                                <td className="py-4 pr-6 font-semibold text-gray-900 hover:underline cursor-pointer">
+                            <tr key={id} className="hover:bg-gray-50 transition-colors" onClick={() => {
+                                if (shortUrl) {
+                                    window.open(`http://localhost:8080/${shortUrl}`, '_blank');
+                                }
+                            }}>
+                                <td className="py-4 pr-6 font-semibold text-gray-900 hover:underline cursor-pointer ">
                                     {shortUrl}
                                 </td>
                                 <td className="py-4 pr-6 text-gray-600 truncate max-w-xs">{originalUrl}</td>
                                 <td className="py-4 pr-6">{clickCount}</td>
-                                <td className="py-4 pr-6 text-gray-500">{formatDate(createdDate)}</td>
-                                <td className="py-4 px-6">
-                                    <button onClick={async() => {
-                                        if (!shortUrl) return;
-                                        window.open("http://localhost:8080/" + shortUrl, '_blank')
-                                         setTimeout(fetchData, 1000);
-                                    }
-                                    }>
-                                        <FaExternalLinkAlt />
-                                    </button></td>
+                                <td className="py-4 pr-6 text-gray-500 ">{formatDate(createdDate)}</td>
+                                <td className="py-4 text-center">
+                                    <button
+                                        className="bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-900 transition-colors duration-200"
+                                        onClick={async () => {
+                                            if (!shortUrl) return;
+                                            window.location.href = '/manage';
+                                            setTimeout(fetchData, 1000);
+                                        }}
+                                    >
+                                        Manage
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
