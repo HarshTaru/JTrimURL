@@ -39,6 +39,10 @@ function AuthPage() {
             if (response.ok) {
                 setMessage({ type: 'success', text: text || 'User registered successfully' });
                 setRegisterData({ username: '', email: '', password: '', role: ['ROLE_USER'] });
+                setRegisterData({ username: '', email: '', password: '' })
+                window.location.href = "/auth";
+                switchMode('login')
+
             } else {
                 setMessage({ type: 'error', text: text || 'Registration failed' });
             }
@@ -65,6 +69,7 @@ function AuthPage() {
             if (response.ok && data.token) {
                 setMessage({ type: 'success', text: 'Login successful' });
                 localStorage.setItem('authToken', data.token);
+                window.location.href = "/dashboard";
                 setLoginData({ username: '', password: '' });
             } else {
                 setMessage({ type: 'error', text: data.message || 'Login failed' });
