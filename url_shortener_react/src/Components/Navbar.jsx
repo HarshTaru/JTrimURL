@@ -29,7 +29,14 @@ const Navbar = () => {
     return (
         <nav className="sticky top-0 bg-white shadow-sm z-30">
             <div className="flex justify-between items-center h-16 px-0 sm:px-4 lg:px-8 max-w-7xl mx-auto">
+                <div>
+                <img
+                    src="/cut.svg"
+                    alt="Logo"
+                    className=" w-20 inline-block mr-2 mb-1"
+                />
                 <a href="/" className="font-extrabold text-2xl text-gray-900 select-none">JTrimURL</a>
+                </div>
 
                 {!isLogin && (
                     <div className="flex items-center space-x-8">
@@ -59,7 +66,7 @@ const Navbar = () => {
                             </a>
                         </>
                     )}
-                    <button
+                    {!isLogin && (<button
                         onClick={(e) => redirectIfNoAuth(e)}
                         className="hidden md:inline-block font-semibold border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         type="button"
@@ -67,6 +74,7 @@ const Navbar = () => {
                     >
                         Create Links
                     </button>
+)}
                 </div>
             </div>
         </nav>
