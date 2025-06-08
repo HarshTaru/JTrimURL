@@ -78,7 +78,6 @@ const Dashboard = () => {
     }
 
     function Metrics() {
-        if ((!clicks || clicks.length === 0) & (!linksCount || linksCount.length === 0)) return "No metrics available at the moment.";
         return (
             <section className="max-w-7xl mx-auto px-6 mb-20 mt-0">
                 <div className="flex justify-center gap-6" >
