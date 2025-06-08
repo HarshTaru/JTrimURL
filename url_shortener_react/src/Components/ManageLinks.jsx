@@ -3,6 +3,7 @@ import { FiExternalLink, FiTrash2 } from "react-icons/fi";
 import Navbar from "./Navbar";
 import { formatDate } from "../utils/FormatDate";
 import Footer from "./Footer";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "${API_BASE_URL}";
 
 function ManageLinks() {
   const [links, setLinks] = useState([]);
@@ -17,7 +18,7 @@ function ManageLinks() {
       setLoading(true);
       setError(null);
       const authToken = localStorage.getItem('authToken');
-      const linksRes = await fetch('http://localhost:8080/api/urls/myurls', {
+      const linksRes = await fetch(`${API_BASE_URL}/api/urls/myurls`, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 
@@ -53,7 +54,7 @@ function ManageLinks() {
       return;
     }
     
-    const result = await fetch(`http://localhost:8080/public/${shortUrl}`,  {
+    const result = await fetch(`${API_BASE_URL}/public/${shortUrl}`,  {
       headers: { Authorization: `Bearer ${authToken}` },
       method: 'GET',
     });
@@ -87,7 +88,7 @@ function ManageLinks() {
   const confirmDelete = async () => {
     if (!linkToDelete) return;
     const authToken = localStorage.getItem("authToken");
-    await fetch(`http://localhost:8080/api/urls/delete/${linkToDelete}`, {
+    await fetch(`${API_BASE_URL}/api/urls/delete/${linkToDelete}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${authToken}` },
     });

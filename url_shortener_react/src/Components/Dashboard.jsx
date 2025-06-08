@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { formatDate } from '../utils/FormatDate';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
 
 
 const Dashboard = () => {
@@ -21,7 +22,7 @@ const Dashboard = () => {
             setLoading(true);
             setError(null);
             const authToken = localStorage.getItem('authToken');
-            const linksRes = await fetch('http://localhost:8080/api/urls/myurls', {
+            const linksRes = await fetch(`${API_BASE_URL}/api/urls/myurls`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
 
@@ -99,7 +100,7 @@ const Dashboard = () => {
             if (!processedUrl.startsWith('http://') && !processedUrl.startsWith('https://')) {
                 processedUrl = 'https://' + processedUrl;
             }
-            const response = await fetch('http://localhost:8080/api/urls/shorten', {
+            const response = await fetch(`${API_BASE_URL}/api/urls/shorten`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${authToken}`,
@@ -181,7 +182,7 @@ const Dashboard = () => {
                         {links.map(({ id, originalUrl, shortUrl, clickCount, createdDate }) => (
                             <tr key={id} className="hover:bg-gray-50 transition-colors" onClick={() => {
                                 if (shortUrl) {
-                                    window.open(`http://localhost:8080/${shortUrl}`, '_blank');
+                                    window.open(`${API_BASE_URL}/${shortUrl}`, '_blank');
                                 }
                             }}>
                                 <td className="py-4 pr-6 font-semibold text-gray-900 hover:underline cursor-pointer ">

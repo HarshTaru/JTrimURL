@@ -1,5 +1,6 @@
 import React from 'react';
 const { useState } = React;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
@@ -27,7 +28,7 @@ function AuthPage() {
         setLoading(true);
         setMessage(null);
         try {
-            const response = await fetch('http://localhost:8080/api/auth/public/register', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/public/register`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -57,7 +58,7 @@ function AuthPage() {
         setLoading(true);
         setMessage(null);
         try {
-            const response = await fetch('http://localhost:8080/api/auth/public/login', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/public/login`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

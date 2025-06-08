@@ -7,6 +7,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import '../App.css'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "${API_BASE_URL}";
+
 Chart.register(...registerables);
 
 
@@ -42,7 +44,7 @@ const Analytics = () => {
 
         try {
             const res = await fetch(
-                `http://localhost:8080/api/urls/analytics/${shortUrl}?startDate=${startDate}T00:00:00&endDate=${endDate}T23:59:59`
+                `${API_BASE_URL}/api/urls/analytics/${shortUrl}?startDate=${startDate}T00:00:00&endDate=${endDate}T23:59:59`
                 , {
                     method: "GET",
                     headers: {
