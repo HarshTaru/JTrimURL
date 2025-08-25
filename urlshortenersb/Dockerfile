@@ -1,23 +1,17 @@
-# ---------- Build Stage ----------
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+# Use Maven to build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy pom.xml and source code
-COPY urlshorternersb/pom.xml .
-COPY urlshorternersb/src ./src
+# Copy pom + source
+COPY pom.xml .
+COPY src ./src
 
-# Build jar (skip tests for faster builds)
 RUN mvn clean package -DskipTests
 
-# ---------- Runtime Stage ----------
+# Runtime
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Copy jar from builder
-COPY --from=builder /app/target/*.jar app.jar
-
-# Render sets $PORT dynamically
-ENV PORT=8080
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]
